@@ -1,7 +1,9 @@
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import 'dart:convert';
+import 'dart:async';
 
 abstract class DartPenance<T>
 {
@@ -46,6 +48,80 @@ abstract class Service
     Future<http.Response> get(String endpoint, [Map<String, dynamic>? params])
     {
 		return _client.get( Uri.https(_networkDomain, _networkPrefix + endpoint, params), headers: {"project_id": _projectId });
+    }
+
+	Future<http.Response> postVoid(String endpoint, [Map<String, dynamic>? params])
+    {
+		return _client.post( Uri.https(_networkDomain, _networkPrefix + endpoint, params), headers: {"project_id": _projectId }, body:[] );
+    }
+
+	Future<http.StreamedResponse> getStreamed(String endpoint, [Map<String, dynamic>? params])
+	{
+		http.StreamedRequest req = http.StreamedRequest("GET", Uri.https(_networkDomain, _networkPrefix + endpoint, params));
+		req.headers.addAll( {"project_id": _projectId } );
+		
+		req.sink.close();
+		
+		return _client.send(req);
+	}
+    
+	Future<List<int>> byteStreamToList(Stream<List<int>> data)
+	{
+		var completer = Completer<List<int>>();
+		
+		List<int> totalData = [];
+		
+		data.listen((List<int> chunk)
+		{
+    		totalData.addAll(chunk);
+    	},onDone: ()
+		{
+			completer.complete(totalData);
+		});
+		
+		return completer.future;
+	}
+
+	Future<http.StreamedResponse> postFile(String endpoint, String name, Stream<List<int>> data, [Map<String, dynamic>? params, Map<String, String>? additionalHeaders]) async
+	{
+		http.MultipartRequest req = http.MultipartRequest('POST', Uri.https(_networkDomain, _networkPrefix + endpoint, params) );
+		req.headers.addAll( {"project_id": _projectId } );
+		
+		if( additionalHeaders != null )
+		{ 
+			req.headers.addAll( additionalHeaders );
+		}
+		
+		List<int> totalData = await byteStreamToList(data);
+	
+  		http.MultipartFile multipartFile = http.MultipartFile.fromBytes('file', totalData, filename: name);
+		req.files.add( multipartFile );
+		
+		//req.files.add( http.MultipartFile("file", data, 5, filename:name, contentType:MediaType('application', 'octet-stream') ) );
+		
+		return _client.send(req);
+	}
+
+  	Future<http.StreamedResponse> postData(String endpoint, Stream<List<int>> data, [Map<String, dynamic>? params, Map<String, String>? additionalHeaders]) async
+    {	
+		http.StreamedRequest req = http.StreamedRequest("POST", Uri.https(_networkDomain, _networkPrefix + endpoint, params));
+		req.headers.addAll( {"project_id": _projectId } );
+		
+		if( additionalHeaders != null )
+		{ 
+			req.headers.addAll( additionalHeaders );
+		}
+		
+		data.listen((List<int> chunk)
+		{
+  			req.sink.add(chunk);
+	
+		}, onDone: ()
+		{
+  			req.sink.close();
+		});
+
+		return _client.send(req);
     }
     
 
@@ -100,6 +176,21 @@ abstract class Service
 		}
 	}
 	
+	Future<String> stringFromRespStreamed(Future<http.StreamedResponse> futureRes) async
+	{
+		http.StreamedResponse res = await futureRes;
+	
+		if( res.statusCode == 200 )
+		{
+			return res.stream.bytesToString();
+		}
+		
+		else
+		{
+			throw Exception(res.statusCode);
+		}
+	}
+	
 	Future<String> stringFromResp(Future<http.Response> futureRes) async
     {
 		http.Response res = await futureRes;
@@ -118,6 +209,29 @@ abstract class Service
 	
     }
     
+	Future<T> objectFromRespStreamed<T extends DartPenance>(Future<http.StreamedResponse> futureRes, T t) async
+	{
+		http.StreamedResponse res = await futureRes;
+		
+		if( res.statusCode == 200 )
+		{
+			Map<String, dynamic> json = jsonDecode( await res.stream.bytesToString() );
+		
+			t.fromJson(json);
+				
+			return Future<T>.value(t);
+		}
+		
+		else
+		{
+			throw Exception(res.statusCode);
+		}
+		
+		
+		
+		
+	}
+
 	//https://docs.flutter.dev/development/data-and-backend/json
     Future<T> objectFromResp<T extends DartPenance>(Future<http.Response> futureRes, T t) async
     {

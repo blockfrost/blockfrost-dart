@@ -14,5 +14,6 @@ export 'src/pools_service.dart';
 export 'src/scripts_service.dart';
 export 'src/transactions_service.dart';
 export 'src/utilities_service.dart';
+export 'src/ipfs_service.dart';
 
 

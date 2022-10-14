@@ -557,6 +557,14 @@ class TransactionsService extends Service
         return listFromResp(resp, TransactionRedeemer() );
     }
     
+	Future<String> submitTransaction(Stream<List<int>> cbor)
+    {
+		Future<http.StreamedResponse> resp = postData("/tx/submit", cbor, null, {"Content-Type": "application/cbor" });
+	
+		return stringFromRespStreamed(resp);
+    }
+    
+    
  
    
 }

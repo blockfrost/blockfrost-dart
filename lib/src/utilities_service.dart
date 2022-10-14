@@ -37,6 +37,13 @@ class UtilitiesService extends Service
 			
 		return objectFromResp(resp, UtilitiesAddress());        
     }
+
+    Future<String> submitTransactionForEvaluation(Stream<List<int>> cbor)
+    {
+		Future<http.StreamedResponse> resp = postData("/utils/txs/evaluate", cbor, null, {"Content-Type": "application/cbor" });
+	
+		return stringFromRespStreamed(resp);
+    }
  
 }
 
