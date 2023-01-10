@@ -78,7 +78,7 @@ class NetworkService extends Service
  
     Future<NetworkInformation> getNetworkInformation()
     {	
-		Future<http.Response> resp = get("/network");
+		Future<http.Response> resp = get("/network", null);
 	
         return objectFromResp(resp, NetworkInformation() );
     }

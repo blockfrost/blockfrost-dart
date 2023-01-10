@@ -264,16 +264,16 @@ class AccountsService extends Service
     
     Future<AccountContent> getAccount(String stake_address)
     {
-		Future<http.Response> resp = get("/accounts/$stake_address");
+		Future<http.Response> resp = get("/accounts/$stake_address", null);
 	
         return objectFromResp(resp, AccountContent() );
 
     }
     
    
-    Future<List<AccountRewardHistory>> getAccountRewardHistory(String stake_address)
+    Future<List<AccountRewardHistory>> getAccountRewardHistory(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/rewards");
+		Future<http.Response> resp = get("/accounts/$stake_address/rewards", createPage(count, page, order));
 	
         return listFromResp(resp, AccountRewardHistory() );
         
@@ -281,57 +281,57 @@ class AccountsService extends Service
     }
     
    
-    Future<List<AccountHistory>> getAccountHistory(String stake_address)
+    Future<List<AccountHistory>> getAccountHistory(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/history");
+		Future<http.Response> resp = get("/accounts/$stake_address/history", createPage(count, page, order));
 	
         return listFromResp(resp, AccountHistory() );
     }
     
   
-    Future<List<AccountDelegationHistory>> getAccountDelegationHistory(String stake_address)
+    Future<List<AccountDelegationHistory>> getAccountDelegationHistory(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/delegations");
+		Future<http.Response> resp = get("/accounts/$stake_address/delegations", createPage(count, page, order));
         
 		return listFromResp(resp, AccountDelegationHistory() );
     }
     
   
-    Future<List<AccountRegistrationHistory>> getAccountRegistrationHistory(String stake_address)
+    Future<List<AccountRegistrationHistory>> getAccountRegistrationHistory(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/registrations");
+		Future<http.Response> resp = get("/accounts/$stake_address/registrations", createPage(count, page, order));
 		
 		return listFromResp(resp, AccountRegistrationHistory() );
     }
     
 
-    Future<List<AccountWithdrawalHistory>> getAccountWithdrawalHistory(String stake_address) 
+    Future<List<AccountWithdrawalHistory>> getAccountWithdrawalHistory(String stake_address, {int? count, int? page, String? order}) 
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/withdrawals");
+		Future<http.Response> resp = get("/accounts/$stake_address/withdrawals", createPage(count, page, order));
 	
         return listFromResp(resp, AccountWithdrawalHistory() );
     }
     
   
-    Future<List<AccountMirHistory>> getAccountMirHistory(String stake_address)
+    Future<List<AccountMirHistory>> getAccountMirHistory(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/mirs");
+		Future<http.Response> resp = get("/accounts/$stake_address/mirs", createPage(count, page, order));
 	
         return listFromResp(resp, AccountMirHistory() );
     }
     
    
-    Future<List<AccountAssociatedAddress>> getAccountAssociatedAddresses(String stake_address)
+    Future<List<AccountAssociatedAddress>> getAccountAssociatedAddresses(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/addresses");
+		Future<http.Response> resp = get("/accounts/$stake_address/addresses", createPage(count, page, order));
 	
 		return listFromResp(resp, AccountAssociatedAddress() );
     }
     
    
-    Future<List<AccountAsset>> getAccountAssociatedAssets(String stake_address)
+    Future<List<AccountAsset>> getAccountAssociatedAssets(String stake_address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/addresses/assets");
+		Future<http.Response> resp = get("/accounts/$stake_address/addresses/assets", createPage(count, page, order));
 	
         return listFromResp(resp, AccountAsset() );
     }
@@ -339,7 +339,7 @@ class AccountsService extends Service
   
     Future<AccountTotal> getAccountAssociatedAddressesTotal(String stake_address)
     {
-		Future<http.Response> resp = get("/accounts/$stake_address/addresses/total");
+		Future<http.Response> resp = get("/accounts/$stake_address/addresses/total", null);
 	
 		return objectFromResp(resp, AccountTotal() );
     }

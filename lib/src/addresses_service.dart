@@ -204,7 +204,7 @@ class AddressesService extends Service
    
     Future<Address> getAddress(String address)
     {
-		Future<http.Response> resp = get("/addresses/$address");
+		Future<http.Response> resp = get("/addresses/$address", null);
 	
         return objectFromResp(resp, Address() );
     }
@@ -212,7 +212,7 @@ class AddressesService extends Service
    
     Future<AddressExtended> getAddressExtended(String address)
     {
-		Future<http.Response> resp = get("/addresses/$address/extended");
+		Future<http.Response> resp = get("/addresses/$address/extended", null);
 	
         return objectFromResp(resp, AddressExtended() );
     }
@@ -220,30 +220,30 @@ class AddressesService extends Service
   
     Future<AddressTotal> getAddressTotal(String address)
     {
-		Future<http.Response> resp = get("/addresses/$address/total");
+		Future<http.Response> resp = get("/addresses/$address/total", null);
 	
 		return objectFromResp(resp, AddressTotal() );       
     }
     
   
-    Future<List<AddressTotal>> getAddressUTXOs(String address)
+    Future<List<AddressTotal>> getAddressUTXOs(String address, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/addresses/$address/utxos");
+		Future<http.Response> resp = get("/addresses/$address/utxos", createPage(count, page, order));
 	
         return listFromResp(resp, AddressTotal() );       
 
     }
     
    
-    Future<List<AddressTotal>> getAddressUTXOsOfAsset(String address, String asset)
+    Future<List<AddressTotal>> getAddressUTXOsOfAsset(String address, String asset, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/addresses/$address/utxos/$asset");
+		Future<http.Response> resp = get("/addresses/$address/utxos/$asset", createPage(count, page, order));
 	
         return listFromResp(resp, AddressTotal() );
     }
     
   
-    Future<List<AddressTransaction>> getAddressTransactions(String address, [int? from, int? to])
+    Future<List<AddressTransaction>> getAddressTransactions(String address,  {int? count, int? page, String? order, int? from, int? to})
     {
 		var params = from != null || to != null? Map<String, dynamic>() : null;
 		
@@ -256,7 +256,7 @@ class AddressesService extends Service
             	params["to"] = to;
 		}
      
-		Future<http.Response> resp = get("/addresses/$address/transactions", params);
+		Future<http.Response> resp = get("/addresses/$address/transactions", createPage(count, page, order), params);
    
         return listFromResp(resp, AddressTransaction() );
 

@@ -102,38 +102,38 @@ class BlockService extends Service
  
     Future<BlockContent> getLatestBlock()
     {
-		Future<http.Response> resp = get("/blocks/latest");
+		Future<http.Response> resp = get("/blocks/latest", null);
         
         return objectFromResp(resp, BlockContent() );
     }
     
 
-    Future<List<String>> getLatestBlockTransactions()
+    Future<List<String>> getLatestBlockTransactions( {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/blocks/latest/txs");
+		Future<http.Response> resp = get("/blocks/latest/txs", createPage(count, page, order));
 		
 		return listOfStringFromResp(resp);
     }
   
     Future<BlockContent> getBlock(String hash_or_number)
     {
-		Future<http.Response> resp = get("/blocks/$hash_or_number");
+		Future<http.Response> resp = get("/blocks/$hash_or_number", null);
 	        
         return objectFromResp(resp, BlockContent() );
     }
     
  
-    Future<List<BlockContent>> listNextBlocks(String hash_or_number)             
+    Future<List<BlockContent>> listNextBlocks(String hash_or_number, {int? count, int? page, String? order})             
     {
-		Future<http.Response> resp = get("/blocks/$hash_or_number/next");
+		Future<http.Response> resp = get("/blocks/$hash_or_number/next", createPage(count, page, order));
 	
         return listFromResp(resp, BlockContent() );
     }
     
 
-    Future<List<BlockContent>> listPreviousBlocks(String hash_or_number)
+    Future<List<BlockContent>> listPreviousBlocks(String hash_or_number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/blocks/$hash_or_number/previous");
+		Future<http.Response> resp = get("/blocks/$hash_or_number/previous", createPage(count, page, order));
 
 		return listFromResp(resp, BlockContent() ); 
     }
@@ -141,7 +141,7 @@ class BlockService extends Service
 
     Future<BlockContent> getSpecificBlockInSlot(int slot) 
     {
-		Future<http.Response> resp = get("/blocks/slot/$slot");
+		Future<http.Response> resp = get("/blocks/slot/$slot", null);
 	
         return objectFromResp(resp, BlockContent() );
     }
@@ -149,24 +149,24 @@ class BlockService extends Service
  
     Future<BlockContent> getSpecificBlockInSlotInEpoch(int slot, int epoch) 
     {
-		Future<http.Response> resp = get("/blocks/epoch/$epoch/slot/$slot");
+		Future<http.Response> resp = get("/blocks/epoch/$epoch/slot/$slot", null);
 	
 		return objectFromResp(resp, BlockContent() );
     }
     
  
-    Future<List<String>> getBlockTransactions(dynamic hash_or_number) 
+    Future<List<String>> getBlockTransactions(dynamic hash_or_number, {int? count, int? page, String? order}) 
     {
-		Future<http.Response> resp = get("/blocks/$hash_or_number/txs");
+		Future<http.Response> resp = get("/blocks/$hash_or_number/txs", createPage(count, page, order));
 	        
         return listOfStringFromResp(resp);
     }
     
    
 
-    Future<List<BlockAddress>> getAddressesAffectedInBlock(hash_or_number)
+    Future<List<BlockAddress>> getAddressesAffectedInBlock(hash_or_number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/blocks/$hash_or_number/addresses");
+		Future<http.Response> resp = get("/blocks/$hash_or_number/addresses", createPage(count, page, order));
 	
         return listFromResp<BlockAddress>(resp, BlockAddress() ); 
     }

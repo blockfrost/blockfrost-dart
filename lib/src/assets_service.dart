@@ -124,45 +124,45 @@ class AssetsService extends Service
     AssetsService(network, projectId)
 		:super(network, projectId);
     
-    Future<List<Asset>> getAssetList()
+    Future<List<Asset>> getAssetList( {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/assets");
+		Future<http.Response> resp = get("/assets", createPage(count, page, order));
 	
 		return listFromResp(resp, Asset() );
     }
     
     Future<AssetContent> getAsset(String asset)
     {
-		Future<http.Response> resp = get("/assets/$asset");
+		Future<http.Response> resp = get("/assets/$asset", null);
 	
         return objectFromResp(resp, AssetContent() );
     }
     
-    Future<List<AssetHistory>> getAssetHistory(String asset)
+    Future<List<AssetHistory>> getAssetHistory(String asset, {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/assets/$asset/history");
+		Future<http.Response> resp = get("/assets/$asset/history", createPage(count, page, order));
 	
         return listFromResp(resp, AssetHistory() );
     }
    
-   	Future<List<AssetTransaction>> getAssetTransactions(String asset)
+   	Future<List<AssetTransaction>> getAssetTransactions(String asset, {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/assets/$asset/transactions");
+		Future<http.Response> resp = get("/assets/$asset/transactions", createPage(count, page, order));
 	
         return listFromResp(resp, AssetTransaction() );
     }
     
-  	Future<List<AssetAddress>> getAssetByAddresses(String asset)
+  	Future<List<AssetAddress>> getAssetByAddresses(String asset, {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/assets/$asset/addresses");
+		Future<http.Response> resp = get("/assets/$asset/addresses", createPage(count, page, order));
 	
         return listFromResp(resp, AssetAddress() );
     }
     
    
-    Future<List<AssetAddress>> getAssetsByPolicy(String policy_id)
+    Future<List<AssetAddress>> getAssetsByPolicy(String policy_id, {int? count, int? page, String? order} )
     {
-		Future<http.Response> resp = get("/assets/policy/$policy_id");
+		Future<http.Response> resp = get("/assets/policy/$policy_id", createPage(count, page, order));
 	
         return listFromResp(resp, AssetAddress() );
     }

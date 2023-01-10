@@ -5,6 +5,8 @@ import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 import 'dart:async';
 
+import './throttler.dart';
+
 abstract class DartPenance<T>
 {
 	T fromJson(Map<String, dynamic> json);
@@ -12,10 +14,25 @@ abstract class DartPenance<T>
       
 }
 
+class Page
+{
+	Page(int count, int page, String order)
+		: _count = count, _page = page, _order = order;
+	
+	final int _count;
+	final int _page;
+	final String _order;
+	
+	Map<String, dynamic> toMap()
+	{
+		return {"count":"$_count", "page":"$_page", "order":_order};
+	}
+}
+
 abstract class Service
 {
     Service(String network, String projectId)
-		: _projectId = projectId, _client = http.Client()
+		: _projectId = projectId, _client = http.Client(), _throttler = Throttler.create()
 	{  
 		String scheme = "https://";
 		
@@ -36,6 +53,8 @@ abstract class Service
 		_client.close();
 	}
     
+	final Throttler _throttler;
+
     late String _networkDomain;
 	late String _networkPrefix;
     final String _projectId;
@@ -44,19 +63,60 @@ abstract class Service
     static const String networkIPFS           = "https://ipfs.blockfrost.io/api/v0";
     static const String networkCardanoMainnet = "https://cardano-mainnet.blockfrost.io/api/v0";
     static const String networkCardanoTestnet = "https://cardano-testnet.blockfrost.io/api/v0";
-     
-    Future<http.Response> get(String endpoint, [Map<String, dynamic>? params])
-    {
-		return _client.get( Uri.https(_networkDomain, _networkPrefix + endpoint, params), headers: {"project_id": _projectId });
-    }
-
-	Future<http.Response> postVoid(String endpoint, [Map<String, dynamic>? params])
-    {
-		return _client.post( Uri.https(_networkDomain, _networkPrefix + endpoint, params), headers: {"project_id": _projectId }, body:[] );
-    }
-
-	Future<http.StreamedResponse> getStreamed(String endpoint, [Map<String, dynamic>? params])
+    
+	Page? createPage(int? count, int? page, String? order)
 	{
+		if( count == null && page == null && order == null )
+			return null;
+			
+		count ??= 100;
+		page  ??= 1;
+		order ??= "asc";
+		
+		return Page(count, page, order);
+	}
+	
+	Map<String, dynamic>? makeParams(Map<String, dynamic>? params, Page? page)
+	{
+		if( params == null )
+		{
+			if( page == null )
+				return null;
+				
+			return page.toMap();
+		}
+		
+		else
+		{
+			if( page == null )
+				return params;
+				
+			var out = Map<String, dynamic>();
+			out.addAll(params);
+			out.addAll(page.toMap());
+			
+			return out;
+		}
+	}
+
+    Future<http.Response>  get(String endpoint, Page? page, [Map<String, dynamic>? params]) async
+    {
+		await _throttler.next();
+	
+		return _client.get( Uri.https(_networkDomain, _networkPrefix + endpoint, makeParams(params, page) ), headers: {"project_id": _projectId });
+    }
+
+	Future<http.Response> postVoid(String endpoint, Page? page, [Map<String, dynamic>? params]) async
+    {
+		await _throttler.next();
+	
+		return _client.post( Uri.https(_networkDomain, _networkPrefix + endpoint, makeParams(params, page)) , headers: {"project_id": _projectId }, body:[] );
+    }
+
+	Future<http.StreamedResponse> getStreamed(String endpoint, [Map<String, dynamic>? params]) async
+	{
+		await _throttler.next();
+		
 		http.StreamedRequest req = http.StreamedRequest("GET", Uri.https(_networkDomain, _networkPrefix + endpoint, params));
 		req.headers.addAll( {"project_id": _projectId } );
 		
@@ -82,8 +142,27 @@ abstract class Service
 		return completer.future;
 	}
 
+/*	thing()
+	{
+		String newline = String.fromCharCodes([13, 10]);
+		
+		String s = "";
+	//	s += "Content-Type: multipart/form-data; boundary=------------------------c0aac0efb7ca723d" + newline;
+	//	s += newline;
+		s += "--------------------------c0aac0efb7ca723d" + newline;
+		s += "Content-Disposition: form-data; name=\"file\"; filename=\"hello.txt\"" + newline;
+		s += "Content-Type: text/plain" + newline;
+		s += newline;
+		s += "HELLO" + newline;
+		s += "--------------------------c0aac0efb7ca723d--" + newline;
+		
+		return s;
+	}*/
+
 	Future<http.StreamedResponse> postFile(String endpoint, String name, Stream<List<int>> data, [Map<String, dynamic>? params, Map<String, String>? additionalHeaders]) async
 	{
+		await _throttler.next();
+		
 		http.MultipartRequest req = http.MultipartRequest('POST', Uri.https(_networkDomain, _networkPrefix + endpoint, params) );
 		req.headers.addAll( {"project_id": _projectId } );
 		
@@ -92,20 +171,28 @@ abstract class Service
 			req.headers.addAll( additionalHeaders );
 		}
 		
-		List<int> totalData = await byteStreamToList(data);
+		//List<int> totalData = await byteStreamToList(data);
 	
-  		http.MultipartFile multipartFile = http.MultipartFile.fromBytes('file', totalData, filename: name);
-		req.files.add( multipartFile );
+  		//http.MultipartFile multipartFile = http.MultipartFile.fromBytes('file', totalData, filename: name, contentType: MediaType('image', 'jpeg'));
+		//req.files.add( multipartFile );
 		
-		//req.files.add( http.MultipartFile("file", data, 5, filename:name, contentType:MediaType('application', 'octet-stream') ) );
+		req.files.add( http.MultipartFile("file", data, 5, filename:name, contentType:MediaType('application', 'octet-stream') ) ); //text/plain
 		
 		return _client.send(req);
-	}
+		
+		
+		
+		//return postData(endpoint, Stream.value( utf8.encode( thing() ) ), params, additionalHeaders);  
+	} 
 
   	Future<http.StreamedResponse> postData(String endpoint, Stream<List<int>> data, [Map<String, dynamic>? params, Map<String, String>? additionalHeaders]) async
     {	
+		await _throttler.next();
+	
 		http.StreamedRequest req = http.StreamedRequest("POST", Uri.https(_networkDomain, _networkPrefix + endpoint, params));
 		req.headers.addAll( {"project_id": _projectId } );
+		
+		//req.headers["Content-Type"] = "multipart/form-data; boundary=------------------------c0aac0efb7ca723d";
 		
 		if( additionalHeaders != null )
 		{ 

@@ -472,7 +472,7 @@ class TransactionsService extends Service
    
     Future<Transaction> getTransaction(String hash) 
     {
-		Future<http.Response> resp = get("/txs/$hash");
+		Future<http.Response> resp = get("/txs/$hash", null);
 	
         return objectFromResp(resp, Transaction() );
 
@@ -481,7 +481,7 @@ class TransactionsService extends Service
  
     Future<TransactionUTXOs> getTransactionUTXOs(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/utxos");
+		Future<http.Response> resp = get("/txs/$hash/utxos", null);
 	
         
 		return objectFromResp(resp, TransactionUTXOs() );
@@ -490,7 +490,7 @@ class TransactionsService extends Service
   
     Future<List<TransactionAddressCertificate>> getTransactionStakeAddressCertificates(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/stakes");
+		Future<http.Response> resp = get("/txs/$hash/stakes", null);
 	
         return listFromResp(resp, TransactionAddressCertificate() );
     }
@@ -498,14 +498,14 @@ class TransactionsService extends Service
    
     Future<List<TransactionDelegationCertificate>> getTransactionDelegationCertificates(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/delegations");
+		Future<http.Response> resp = get("/txs/$hash/delegations", null);
 	
         return listFromResp(resp, TransactionDelegationCertificate() );
     }
   
     Future<List<TransactionWithdrawal>> getTransactionWithdrawals(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/withdrawals");
+		Future<http.Response> resp = get("/txs/$hash/withdrawals", null);
 	
 		return listFromResp(resp, TransactionWithdrawal() );
     }
@@ -513,14 +513,14 @@ class TransactionsService extends Service
   
     Future<List<TransactionMir>> getTransactionMIRs(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/mirs");
+		Future<http.Response> resp = get("/txs/$hash/mirs", null);
 	
 		return listFromResp(resp, TransactionMir() );
     }
   
     Future<List<TransactionRegistrationAndUpdateCertificate>> getTransactionStakePoolUpdateCertificates(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/pool_updates");
+		Future<http.Response> resp = get("/txs/$hash/pool_updates", null);
 		
 		return listFromResp(resp, TransactionRegistrationAndUpdateCertificate() );
     }
@@ -528,7 +528,7 @@ class TransactionsService extends Service
   
     Future<List<TransactionRetirementCertificate>> getTransactionStakePoolRetirementCertificates(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/pool_retires");
+		Future<http.Response> resp = get("/txs/$hash/pool_retires", null);
 	
         return listFromResp(resp, TransactionRetirementCertificate() );
     }
@@ -536,7 +536,7 @@ class TransactionsService extends Service
     
     Future<List<TransactionMetadata>> getTransactionMetadata(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/metadata");
+		Future<http.Response> resp = get("/txs/$hash/metadata", null);
 	
 		return listFromResp(resp, TransactionMetadata() );
     }
@@ -544,7 +544,7 @@ class TransactionsService extends Service
  
     Future<List<TransactionMetadataCBOR>> getTransactionMetadataAsCBOR(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/metadata/cbor");
+		Future<http.Response> resp = get("/txs/$hash/metadata/cbor", null);
 	
 		return listFromResp(resp, TransactionMetadataCBOR() );
     }
@@ -552,7 +552,7 @@ class TransactionsService extends Service
  
     Future<List<TransactionRedeemer>> getTransactionRedeemers(String hash)
     {
-		Future<http.Response> resp = get("/txs/$hash/redeemers");
+		Future<http.Response> resp = get("/txs/$hash/redeemers", null);
 	
         return listFromResp(resp, TransactionRedeemer() );
     }

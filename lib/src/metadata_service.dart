@@ -71,9 +71,9 @@ class MetadataService extends Service
     MetadataService(network, projectId)
 		:super(network, projectId);
    
-    Future<List<MetadataLabel>> getTransactionMetadataLabels()
+    Future<List<MetadataLabel>> getTransactionMetadataLabels({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/metadata/txs/labels");
+		Future<http.Response> resp = get("/metadata/txs/labels", createPage(count, page, order));
 	
         
         return listFromResp(resp, MetadataLabel() );
@@ -81,18 +81,18 @@ class MetadataService extends Service
 
     }
     
-    Future<List<MetadataJSON>> getTransactionMetadataAsJSON(String label)
+    Future<List<MetadataJSON>> getTransactionMetadataAsJSON(String label, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/metadata/txs/labels/$label");
+		Future<http.Response> resp = get("/metadata/txs/labels/$label", createPage(count, page, order));
 	
         return listFromResp(resp, MetadataJSON() );
         
         
     }
     
-    Future<List<MetadataCBOR>> getTransactionMetadataAsCBOR(String label)
+    Future<List<MetadataCBOR>> getTransactionMetadataAsCBOR(String label, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/metadata/txs/labels/$label/cbor");
+		Future<http.Response> resp = get("/metadata/txs/labels/$label/cbor", createPage(count, page, order));
 	
         return listFromResp(resp, MetadataCBOR() );
     }

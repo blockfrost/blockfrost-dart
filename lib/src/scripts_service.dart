@@ -130,38 +130,38 @@ class ScriptsService extends Service
     ScriptsService(network, projectId)
 		:super(network, projectId);
     
-    Future<List<Script>> getScripts()
+    Future<List<Script>> getScripts({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/scripts");
+		Future<http.Response> resp = get("/scripts", createPage(count, page, order));
 	
         return listFromResp(resp, Script() );
     }
     
     Future<ScriptInformation> getScript(String script_hash)
     {
-		Future<http.Response> resp = get("/scripts/$script_hash");
+		Future<http.Response> resp = get("/scripts/$script_hash", null);
         
 		return objectFromResp(resp, ScriptInformation() );
     }
     
     Future<ScriptJSON> getScriptAsJSON(String script_hash)
     {
-		Future<http.Response> resp = get("/scripts/$script_hash/json");
+		Future<http.Response> resp = get("/scripts/$script_hash/json", null);
 	
         return objectFromResp(resp, ScriptJSON() );
     }
     
     Future<ScriptCBOR> getScriptAsCBOR(String script_hash)
     {
-		Future<http.Response> resp = get("/scripts/$script_hash/cbor");
+		Future<http.Response> resp = get("/scripts/$script_hash/cbor", null);
 	
         
 		return objectFromResp(resp, ScriptCBOR() );
     }
     
-    Future<List<ScriptRedeemer>> getScriptRedeemers(String script_hash)
+    Future<List<ScriptRedeemer>> getScriptRedeemers(String script_hash,{int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/scripts/$script_hash/redeemers");
+		Future<http.Response> resp = get("/scripts/$script_hash/redeemers", createPage(count, page, order));
 	
 		
 		return listFromResp(resp, ScriptRedeemer() );        
@@ -170,7 +170,7 @@ class ScriptsService extends Service
  
     Future<ScriptDatum> getDatumAsJSON(String datum_hash)
     {
-		Future<http.Response> resp = get("/scripts/datum/$datum_hash");
+		Future<http.Response> resp = get("/scripts/datum/$datum_hash", null);
 	
         
 		return objectFromResp(resp, ScriptDatum() );        

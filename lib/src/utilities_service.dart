@@ -33,7 +33,7 @@ class UtilitiesService extends Service
     
     Future<UtilitiesAddress> deriveAddress(String xpub, int role, int index)
     {
-		Future<http.Response> resp = get("/utils/addresses/xpub/$xpub/$role/$index");
+		Future<http.Response> resp = get("/utils/addresses/xpub/$xpub/$role/$index", null);
 			
 		return objectFromResp(resp, UtilitiesAddress());        
     }

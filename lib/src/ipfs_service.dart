@@ -73,10 +73,21 @@ class IPFSService extends Service
     IPFSService(network, projectId)
 		:super(network, projectId);
 
+	/*addFile2(String name, Stream<List<int>> stream) async
+	{
+		http.StreamedResponse resp = await postFile("/ipfs/add", name, stream, null, null);
+		
+		
+		return  resp.statusCode;
+		
+	}*/
+
     Future<IPFSAdd> addFile(String name, Stream<List<int>> stream)
     {
 		Future<http.StreamedResponse> resp = postFile("/ipfs/add", name, stream, null, null);
-	
+		
+		
+		
 		return objectFromRespStreamed(resp, IPFSAdd() );
     }
     
@@ -93,15 +104,15 @@ class IPFSService extends Service
    
     Future<IPFSPinChange> pinObject(String IPFS_path)
     {
-		Future<http.Response> resp = postVoid("/ipfs/pin/add/$IPFS_path");
+		Future<http.Response> resp = postVoid("/ipfs/pin/add/$IPFS_path", null);
 	
 		return objectFromResp(resp, IPFSPinChange() );
     }
     
    
-    Future<List<IPFSPinnedObject>> listPinnedObjects()
+    Future<List<IPFSPinnedObject>> listPinnedObjects({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/ipfs/pin/list");
+		Future<http.Response> resp = get("/ipfs/pin/list", createPage(count, page, order));
 	
 		return listFromResp(resp, IPFSPinnedObject() );
 	
@@ -110,7 +121,7 @@ class IPFSService extends Service
    
     Future<IPFSPinnedObject> getPinnedObject(String IPFS_path)
     {
-		Future<http.Response> resp = get("/ipfs/pin/list/$IPFS_path");
+		Future<http.Response> resp = get("/ipfs/pin/list/$IPFS_path", null);
 	
 		return objectFromResp(resp, IPFSPinnedObject() );
     }
@@ -118,7 +129,7 @@ class IPFSService extends Service
    
     Future<IPFSPinChange> removePinnedObject(String IPFS_path)
     {
-		Future<http.Response> resp = postVoid("/ipfs/pin/remove/$IPFS_path");
+		Future<http.Response> resp = postVoid("/ipfs/pin/remove/$IPFS_path", null);
 	
         return objectFromResp(resp, IPFSPinChange() );
     }

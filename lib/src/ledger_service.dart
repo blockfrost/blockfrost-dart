@@ -45,7 +45,7 @@ class LedgerService extends Service
   
     Future<LedgerGenesis> getBlockchainGenesis()
     {
-		Future<http.Response> resp = get("/genesis");
+		Future<http.Response> resp = get("/genesis", null);
 	
         return objectFromResp(resp, LedgerGenesis() );
 	

@@ -256,34 +256,34 @@ class PoolsService extends Service
 		:super(network, projectId);
     
    
-    Future<List<String>> getStakePools()
+    Future<List<String>> getStakePools({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools");
+		Future<http.Response> resp = get("/pools", createPage(count, page, order));
 	
 		return listOfStringFromResp(resp);
 
     }
     
    
-    Future<List<PoolExtended>> getStakePoolsExtended()
+    Future<List<PoolExtended>> getStakePoolsExtended({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/extended");
+		Future<http.Response> resp = get("/pools/extended", createPage(count, page, order));
 	
         return listFromResp(resp, PoolExtended() );
     }
     
    
-    Future<List<Pool>> getRetiredStakePools()
+    Future<List<Pool>> getRetiredStakePools({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/retired");
+		Future<http.Response> resp = get("/pools/retired", createPage(count, page, order));
 	
         return listFromResp(resp, Pool() );
     }
     
   
-    Future<List<Pool>> getRetiringStakePools()
+    Future<List<Pool>> getRetiringStakePools({int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/retiring");
+		Future<http.Response> resp = get("/pools/retiring", createPage(count, page, order));
 	
         return listFromResp(resp, Pool() );
     }
@@ -291,16 +291,16 @@ class PoolsService extends Service
    
     Future<PoolStakePool> getStakePool(String pool_id)
     {
-		Future<http.Response> resp = get("/pools/$pool_id");
+		Future<http.Response> resp = get("/pools/$pool_id", null);
 	
         return objectFromResp(resp, PoolStakePool() );
 
     }
     
   
-    Future<List<PoolHistory>> getStakePoolHistory(String pool_id)
+    Future<List<PoolHistory>> getStakePoolHistory(String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/$pool_id/history");
+		Future<http.Response> resp = get("/pools/$pool_id/history", createPage(count, page, order));
 	
         return listFromResp(resp, PoolHistory()) ;
         
@@ -309,7 +309,7 @@ class PoolsService extends Service
   
     Future<PoolMetadata> getStakePoolMetadata(String pool_id)
     {
-		Future<http.Response> resp = get("/pools/{$pool_id}/metadata");
+		Future<http.Response> resp = get("/pools/{$pool_id}/metadata", null);
 	
         return objectFromResp(resp, PoolMetadata() );
     }
@@ -317,31 +317,31 @@ class PoolsService extends Service
   
     Future<List<PoolRelay>> getStakePoolRelays(String pool_id)
     {
-		Future<http.Response> resp = get("/pools/$pool_id/relays");
+		Future<http.Response> resp = get("/pools/$pool_id/relays", null);
 	
         return listFromResp(resp, PoolRelay()) ;
     }
     
    
-    Future<List<PoolDelegator>> getStakePoolDelegators(String pool_id)
+    Future<List<PoolDelegator>> getStakePoolDelegators(String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/$pool_id/delegators");
+		Future<http.Response> resp = get("/pools/$pool_id/delegators", createPage(count, page, order));
 	
         return listFromResp(resp, PoolDelegator()) ;
     }
     
    
-    Future<List<String>> getStakePoolBlocks(String pool_id)
+    Future<List<String>> getStakePoolBlocks(String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/$pool_id/blocks");
+		Future<http.Response> resp = get("/pools/$pool_id/blocks", createPage(count, page, order));
 	
         return listOfStringFromResp(resp);
     }
     
   
-    Future<List<PoolUpdate>> getStakePoolUpdates(String pool_id)
+    Future<List<PoolUpdate>> getStakePoolUpdates(String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/{$pool_id}/updates");
+		Future<http.Response> resp = get("/pools/{$pool_id}/updates", createPage(count, page, order));
 	
         return listFromResp(resp, PoolUpdate()) ;
        

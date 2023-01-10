@@ -169,14 +169,14 @@ class EpochsService extends Service
   
     Future<Epoch> getLatestEpoch()
     {
-		Future<http.Response> resp = get("/epochs/latest");
+		Future<http.Response> resp = get("/epochs/latest", null);
 	
         return objectFromResp(resp, Epoch() );
     }
   
     Future<EpochParameters> getLatestEpochProtocolParameters()
     {
-		Future<http.Response> resp = get("/epochs/latest/parameters");
+		Future<http.Response> resp = get("/epochs/latest/parameters", null);
 	
         return objectFromResp(resp, EpochParameters() );
     }
@@ -184,55 +184,55 @@ class EpochsService extends Service
    
     Future<Epoch> getEpoch(int number)
     {
-		Future<http.Response> resp = get("/epochs/$number");
+		Future<http.Response> resp = get("/epochs/$number", null);
 	
 		return objectFromResp(resp, Epoch() );
     }
     
    
-    Future<List<Epoch>> getNextEpochs(int number)
+    Future<List<Epoch>> getNextEpochs(int number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/$number/next");
+		Future<http.Response> resp = get("/epochs/$number/next", createPage(count, page, order));
 	
 		return listFromResp(resp, Epoch() );        
     }
     
    
-    Future<List<Epoch>> getPreviousEpochs(int number)
+    Future<List<Epoch>> getPreviousEpochs(int number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/$number/previous");
+		Future<http.Response> resp = get("/epochs/$number/previous", createPage(count, page, order));
 	
         return listFromResp(resp, Epoch() );    
     }
     
   
-    Future<List<EpochStakeAndPool>> getStakeDistribution(int number) 
+    Future<List<EpochStakeAndPool>> getStakeDistribution(int number, {int? count, int? page, String? order}) 
     {
-		Future<http.Response> resp = get("/epochs/$number/stakes");
+		Future<http.Response> resp = get("/epochs/$number/stakes", createPage(count, page, order));
 	
         return listFromResp(resp, EpochStakeAndPool() );
     }
     
   
-    Future<List<EpochStake>> getStakeDistributionByPool(int number, String pool_id)
+    Future<List<EpochStake>> getStakeDistributionByPool(int number, String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/$number/stakes/$pool_id");
+		Future<http.Response> resp = get("/epochs/$number/stakes/$pool_id", createPage(count, page, order));
 	
         return listFromResp(resp, EpochStake() );
     }
     
   
-    Future<List<String>> getBlockDistribution(int number)
+    Future<List<String>> getBlockDistribution(int number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/{$number}/blocks");
+		Future<http.Response> resp = get("/epochs/{$number}/blocks", createPage(count, page, order));
 	
         return listOfStringFromResp(resp );
     }
     
    
-    Future<List<String>> getBlockDistributionByPool(int number, String pool_id)
+    Future<List<String>> getBlockDistributionByPool(int number, String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/$number/blocks/$pool_id");
+		Future<http.Response> resp = get("/epochs/$number/blocks/$pool_id", createPage(count, page, order));
 	
         return listOfStringFromResp(resp );
     }
@@ -240,7 +240,7 @@ class EpochsService extends Service
    
     Future<EpochParameters> getProtocolParameters(int number)
     {
-		Future<http.Response> resp = get("/epochs/$number/parameters");
+		Future<http.Response> resp = get("/epochs/$number/parameters", null);
 	
         return objectFromResp(resp, EpochParameters() );
         
