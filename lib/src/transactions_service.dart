@@ -17,8 +17,8 @@ class Transaction extends DartPenance<Transaction>
     late String fees;               // "182485",
     late String deposit;            // "0",
     late num size;               // 433,
-    late dynamic invalid_before;     // null,
-    late String  invalid_hereafter;  // "13885913",
+    late dynamic? invalid_before;     // null,
+    late String?  invalid_hereafter;  // "13885913",
     late num utxo_count;         // 4,
     late num withdrawal_count;   // 0,
     late num mir_cert_count;     // 0,
@@ -67,6 +67,15 @@ class Transaction extends DartPenance<Transaction>
 	{
 		return Transaction();
 	}
+	
+	bool operator==(Object other) =>
+      other is Transaction && hash == other.hash && block == other.block  && block_height == other.block_height  && block_time == other.block_time  && slot == other.slot  && index == other.index  && fees == other.fees
+		&& deposit == other.deposit && size == other.size  && invalid_before == other.invalid_before  && invalid_hereafter == other.invalid_hereafter  && utxo_count == other.utxo_count  && withdrawal_count == other.withdrawal_count  && mir_cert_count == other.mir_cert_count
+		&& delegation_count == other.delegation_count && stake_cert_count == other.stake_cert_count  && pool_update_count == other.pool_update_count  && pool_retire_count == other.pool_retire_count 
+		 && asset_mint_or_burn_count == other.asset_mint_or_burn_count  && redeemer_count == other.redeemer_count  && valid_contract == other.valid_contract && output_amount == other.output_amount;
+
+  	int get hashCode => Object.hash(hash, block, block_height, block_time, slot, index, output_amount, fees, deposit, size, invalid_before, invalid_hereafter, 
+			utxo_count, withdrawal_count, mir_cert_count, delegation_count, stake_cert_count, pool_update_count, pool_retire_count, asset_mint_or_burn_count);
 }
 
 class TransactionAddressCertificate extends DartPenance<TransactionAddressCertificate>
@@ -107,6 +116,11 @@ class TransactionAmount extends DartPenance<TransactionAmount>
 	{
 		return TransactionAmount();
 	}
+	
+	bool operator==(Object other) =>
+      other is TransactionAmount && unit == other.unit && quantity == other.quantity;
+
+  	int get hashCode => Object.hash(unit, quantity);
 }
 
 
@@ -157,8 +171,8 @@ class TransactionMetadata extends DartPenance<TransactionMetadata>
 class TransactionMetadataCBOR extends DartPenance<TransactionMetadataCBOR>
 {
     late String label;          // "1968",
-    late String cbor_metadata;  // "\\xa100a16b436f6d62696e6174696f6e8601010101010c",
-    late String metadata;       // "a100a16b436f6d62696e6174696f6e8601010101010c"
+    late String? cbor_metadata;  // "\\xa100a16b436f6d62696e6174696f6e8601010101010c",
+    late String? metadata;       // "a100a16b436f6d62696e6174696f6e8601010101010c"
 
 	@override TransactionMetadataCBOR fromJson(Map<String, dynamic> json)
 	{
@@ -238,7 +252,7 @@ class TransactionRegistrationAndUpdateCertificate extends DartPenance<Transactio
     late String fixed_cost;     // "340000000",
     late String reward_account; // "stake1uxkptsa4lkr55jleztw43t37vgdn88l6ghclfwuxld2eykgpgvg3f",
     late List<String> owners;         // [],
-    late TransactionRegistrationAndUpdateCertificateMetadata metadata;       // {},
+    late TransactionRegistrationAndUpdateCertificateMetadata? metadata;       // {},
     late List<TransactionRegistrationAndUpdateCertificateRelay> relays;         // [],
     late num active_epoch;   // 210
 
@@ -383,6 +397,11 @@ class TransactionUTXOInput extends DartPenance<TransactionUTXOInput>
 	{
 		return TransactionUTXOInput();
 	}
+	
+	bool operator==(Object other) =>
+      other is TransactionUTXOInput && address == other.address && amount == other.amount  && tx_hash == other.tx_hash && output_index == other.output_index && data_hash == other.data_hash && collateral == other.collateral;
+	
+  	int get hashCode => Object.hash(address, amount, tx_hash, output_index, data_hash, collateral );
 }
 
 class TransactionUTXOOutput extends DartPenance<TransactionUTXOOutput>
@@ -411,6 +430,11 @@ class TransactionUTXOOutput extends DartPenance<TransactionUTXOOutput>
 	{
 		return TransactionUTXOOutput();
 	}
+	
+		bool operator==(Object other) =>
+      other is TransactionUTXOOutput && address == other.address && amount == other.amount  && output_index == other.output_index && data_hash == other.data_hash;
+	
+  	int get hashCode => Object.hash(address, amount, output_index, data_hash); 
   
 }
 
@@ -443,6 +467,12 @@ class TransactionUTXOs extends DartPenance<TransactionUTXOs>
 	{
 		return TransactionUTXOs();
 	}
+	
+	bool operator==(Object other) =>
+      other is TransactionUTXOs && hash == other.hash && inputs == other.inputs  && outputs == other.outputs;
+	
+  	int get hashCode => Object.hash(hash, inputs, outputs); 
+			
 }
 
 class TransactionWithdrawal extends DartPenance<TransactionWithdrawal>

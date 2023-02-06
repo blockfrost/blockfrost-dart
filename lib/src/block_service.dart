@@ -32,17 +32,17 @@ class BlockContent extends DartPenance<BlockContent>
 {
     
     late num time;           //1641338934,
-    late num height;         //15243593,
+    late num? height;         //15243593,
     late String hash;           //"4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a",
-    late num slot;           //412162133,
-    late num epoch;          //425,
-    late num epoch_slot;     //12,
+    late num? slot;           //412162133,
+    late num? epoch;          //425,
+    late num? epoch_slot;     //12,
     late String slot_leader;    //"pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2qnikdy",
     late num size;           //3,
     late num tx_count;       //1,
     late String? output;         //"128314491794",
     late String? fees;           //"592661",
-    late String block_vrf;      //"vrf_vk1wf2k6lhujezqcfe00l6zetxpnmh9n6mwhpmhm0dvfh3fxgmdnrfqkms8ty",
+    late String? block_vrf;      //"vrf_vk1wf2k6lhujezqcfe00l6zetxpnmh9n6mwhpmhm0dvfh3fxgmdnrfqkms8ty",
     late String? previous_block; //"43ebccb3ac72c7cebd0d9b755a4b08412c9f5dcb81b8a0ad1e3c197d29d47b05",
     late String? next_block;     //"8367f026cf4b03e116ff8ee5daf149b55ba5a6ec6dec04803b8dc317721d15fa",
     late num confirmations;  //4698

@@ -92,7 +92,7 @@ class IPFSService extends Service
     }
     
    
-    Future<Stream> getFile(String ipfs_path) async
+    Future<Stream<List<int>>> getFile(String ipfs_path) async
     {       
 		Future<http.StreamedResponse> futureResp = getStreamed("/ipfs/gateway/$ipfs_path");
 	

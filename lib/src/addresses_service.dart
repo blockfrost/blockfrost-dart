@@ -8,7 +8,7 @@ class Address extends DartPenance<Address>
     
     late String address;        // "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
     late List<AddressAccountSum> amount;         // [ { "unit": "lovelace", "quantity": "42000000" }, {} ],
-    late String stake_address;  // "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7",
+    late String? stake_address;  // "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7",
     late String type;           //: "shelley",
     late bool script;         // false
 
@@ -60,7 +60,7 @@ class AddressExtended extends DartPenance<AddressExtended>
     
     late String address;        // "addr1qxqs59lphg8g6qndelq8xwqn60ag3aeyfcp33c2kdp46a09re5df3pzwwmyq946axfcejy5n4x0y99wqpgtp2gd0k09qsgy6pz",
     late List<AddressAccountSum> amount;         // [ { "unit": "lovelace", "quantity": "42000000" }, {} ], //AddressSum
-    late String stake_address;  // "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7",
+    late String? stake_address;  // "stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7",
     late String type;           //: "shelley",
     late bool script;         // false
 
@@ -90,7 +90,7 @@ class AddressSum extends DartPenance<AddressSum>
 {
     late String unit;                       // "lovelace",
     late String quantity;                   // "42000000",
-    late num decimals;                   // 6,
+    late num? decimals;                   // 6,
     late bool has_nft_onchain_metadata;   // false
 
 	@override AddressSum fromJson(Map<String, dynamic> json)

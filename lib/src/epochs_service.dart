@@ -38,6 +38,11 @@ class Epoch  extends DartPenance<Epoch>
 	{
 		return Epoch();
 	}
+	
+	bool operator==(Object other) =>
+      other is Epoch && epoch == other.epoch && start_time == other.start_time && end_time == other.end_time && first_block_time == other.first_block_time && last_block_time == other.last_block_time && block_count == other.block_count && tx_count == other.tx_count && output == other.output && fees == other.fees && active_stake == other.active_stake;
+
+  	int get hashCode => Object.hash(epoch, start_time, end_time, first_block_time, last_block_time, block_count, tx_count, output, fees, active_stake );
 }
 
 class EpochParameters  extends DartPenance<EpochParameters>
@@ -63,16 +68,16 @@ class EpochParameters  extends DartPenance<EpochParameters>
     late String min_utxo;               // "1000000",
     late String min_pool_cost;          // "340000000",
     late String nonce;                  // "1a3be38bcbb7911969283716ad7aa550250226b76a61fc51cc9a9a35d9276d81",
-    late num price_mem;              // 0.0577,
-    late num price_step;             // 0.0000721,
-    late String max_tx_ex_mem;          // "10000000",
-    late String max_tx_ex_steps;        // "10000000000",
-    late String max_block_ex_mem;       // "50000000",
-    late String max_block_ex_steps;     // "40000000000",
-    late String max_val_size;           // "5000",
-    late num collateral_percent;     // 150,
-    late num max_collateral_inputs;  // 3,
-    late String coins_per_utxo_word;    // "34482"
+    late num? price_mem;              // 0.0577,
+    late num? price_step;             // 0.0000721,
+    late String? max_tx_ex_mem;          // "10000000",
+    late String? max_tx_ex_steps;        // "10000000000",
+    late String? max_block_ex_mem;       // "50000000",
+    late String? max_block_ex_steps;     // "40000000000",
+    late String? max_val_size;           // "5000",
+    late num? collateral_percent;     // 150,
+    late num? max_collateral_inputs;  // 3,
+    late String? coins_per_utxo_word;    // "34482"
 
 	@override EpochParameters fromJson(Map<String, dynamic> json)
 	{
@@ -224,7 +229,7 @@ class EpochsService extends Service
   
     Future<List<String>> getBlockDistribution(int number, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/epochs/{$number}/blocks", createPage(count, page, order));
+		Future<http.Response> resp = get("/epochs/$number/blocks", createPage(count, page, order));
 	
         return listOfStringFromResp(resp );
     }

@@ -36,6 +36,13 @@ class LedgerGenesis extends DartPenance<LedgerGenesis>
 	{
 		return LedgerGenesis();
 	}
+	
+	bool operator==(Object other) =>
+      other is LedgerGenesis && active_slots_coefficient == other.active_slots_coefficient && update_quorum == other.update_quorum && max_lovelace_supply == other.max_lovelace_supply 
+			&& network_magic == other.network_magic && epoch_length == other.epoch_length && system_start == other.system_start && slots_per_kes_period == other.slots_per_kes_period 
+			&& slot_length == other.slot_length && max_kes_evolutions == other.max_kes_evolutions && security_param == other.security_param;
+
+  	int get hashCode => Object.hash(active_slots_coefficient, update_quorum, max_lovelace_supply, network_magic, epoch_length, system_start, slots_per_kes_period, slot_length, max_kes_evolutions, security_param );
 }
 
 class LedgerService extends Service 

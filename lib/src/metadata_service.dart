@@ -22,6 +22,12 @@ class MetadataCBOR extends DartPenance<MetadataCBOR>
 	{
 		return MetadataCBOR();
 	}
+	
+	bool operator==(Object other) =>
+      other is MetadataCBOR && tx_hash == other.tx_hash && cbor_metadata == other.cbor_metadata && metadata == other.metadata ;
+
+  	int get hashCode => Object.hash(tx_hash, cbor_metadata, metadata);
+
 }
 
 class MetadataJSON extends DartPenance<MetadataJSON>
@@ -42,6 +48,11 @@ class MetadataJSON extends DartPenance<MetadataJSON>
 	{
 		return MetadataJSON();
 	}
+	
+	bool operator==(Object other) =>
+      other is MetadataJSON && tx_hash == other.tx_hash && json_metadata == other.json_metadata;
+
+  	int get hashCode => Object.hash(tx_hash, json_metadata);
 }
 
 class MetadataLabel extends DartPenance<MetadataLabel>

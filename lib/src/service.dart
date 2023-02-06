@@ -63,6 +63,8 @@ abstract class Service
     static const String networkIPFS           = "https://ipfs.blockfrost.io/api/v0";
     static const String networkCardanoMainnet = "https://cardano-mainnet.blockfrost.io/api/v0";
     static const String networkCardanoTestnet = "https://cardano-testnet.blockfrost.io/api/v0";
+	static const String networkCardanoPreprod = "https://cardano-preprod.blockfrost.io/api/v0";
+	static const String networkCardanoPreview = "https://cardano-preview.blockfrost.io/api/v0";
     
 	Page? createPage(int? count, int? page, String? order)
 	{
@@ -88,12 +90,13 @@ abstract class Service
 		
 		else
 		{
-			if( page == null )
-				return params;
+			 Map<String, dynamic> out = {};
 				
-			var out = Map<String, dynamic>();
-			out.addAll(params);
-			out.addAll(page.toMap());
+			 for(final key in params.keys)
+				out[key] = "${params[key]}";
+			
+			if( page != null )
+				out.addAll( page.toMap() );
 			
 			return out;
 		}
@@ -125,7 +128,7 @@ abstract class Service
 		return _client.send(req);
 	}
     
-	Future<List<int>> byteStreamToList(Stream<List<int>> data)
+	static Future<List<int>> byteStreamToList(Stream<List<int>> data)
 	{
 		var completer = Completer<List<int>>();
 		
@@ -140,6 +143,13 @@ abstract class Service
 		});
 		
 		return completer.future;
+	}
+	
+	static Future<String> byteStreamToUtf8String(Stream<List<int>> data) async
+	{
+		List<int> bytes = await byteStreamToList(data);
+		
+		return utf8.decode(bytes);
 	}
 
 /*	thing()
@@ -171,12 +181,12 @@ abstract class Service
 			req.headers.addAll( additionalHeaders );
 		}
 		
-		//List<int> totalData = await byteStreamToList(data);
+		List<int> totalData = await byteStreamToList(data);
 	
-  		//http.MultipartFile multipartFile = http.MultipartFile.fromBytes('file', totalData, filename: name, contentType: MediaType('image', 'jpeg'));
-		//req.files.add( multipartFile );
+  		http.MultipartFile multipartFile = http.MultipartFile.fromBytes('file', totalData, filename: name, contentType: MediaType('application', 'octet-stream'));
+		req.files.add( multipartFile );
 		
-		req.files.add( http.MultipartFile("file", data, 5, filename:name, contentType:MediaType('application', 'octet-stream') ) ); //text/plain
+		//req.files.add( http.MultipartFile("file", data, 5, filename:name, contentType:MediaType('application', 'octet-stream') ) ); //text/plain
 		
 		return _client.send(req);
 		

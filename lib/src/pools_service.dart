@@ -21,6 +21,11 @@ class Pool  extends DartPenance<Pool>
 	{
 		return Pool();
 	}
+	
+	bool operator==(Object other) =>
+      other is Pool && pool_id == other.pool_id && epoch == other.epoch;
+
+  	int get hashCode => Object.hash(pool_id, epoch);
 }
 
 class PoolDelegator extends DartPenance<PoolDelegator>
@@ -41,6 +46,11 @@ class PoolDelegator extends DartPenance<PoolDelegator>
 	{
 		return PoolDelegator();
 	}
+	
+	bool operator==(Object other) =>
+      other is PoolDelegator && address == other.address && live_stake == other.live_stake ;
+
+  	int get hashCode => Object.hash(address, live_stake);
 }
 
 class PoolExtended extends DartPenance<PoolExtended>
@@ -95,18 +105,24 @@ class PoolHistory extends DartPenance<PoolHistory>
 	{
 		return PoolHistory();
 	}
+	
+	bool operator==(Object other) =>
+      other is PoolHistory && epoch == other.epoch && blocks == other.blocks && active_stake == other.active_stake && active_size == other.active_size 
+			&& delegators_count == other.delegators_count && rewards == other.rewards  && fees == other.fees;
+
+  	int get hashCode => Object.hash(epoch, blocks,active_stake, active_size, delegators_count, rewards, fees );
 }
 
 class PoolMetadata extends DartPenance<PoolMetadata>
 {
     late String pool_id;        // "pool1pu5jlj4q9w9jlxeu370a3c9myx47md5j5m2str0naunn2q3lkdy",
     late String hex;            // "0f292fcaa02b8b2f9b3c8f9fd8e0bb21abedb692a6d5058df3ef2735",
-    late String url;            // "https://stakenuts.com/mainnet.json",
-    late String hash;           // "47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c",
-    late String ticker;         // "NUTS",
-    late String name;           // "Stake Nuts",
-    late String description;    // "The best pool ever",
-    late String homepage;       // "https://stakentus.com/"
+    late String? url;            // "https://stakenuts.com/mainnet.json",
+    late String? hash;           // "47c0c68cb57f4a5b4a87bad896fc274678e7aea98e200fa14a1cb40c0cab1d8c",
+    late String? ticker;         // "NUTS",
+    late String? name;           // "Stake Nuts",
+    late String? description;    // "The best pool ever",
+    late String? homepage;       // "https://stakentus.com/"
 
 	@override PoolMetadata fromJson(Map<String, dynamic> json)
 	{
@@ -136,7 +152,7 @@ class PoolRelay extends DartPenance<PoolRelay>
 {
    	late String?  ipv4;       // "4.4.4.4",
     late String? ipv6;       // "https://stakenuts.com/mainnet.json",
-    late String dns;        // "relay1.stakenuts.com",
+    late String? dns;        // "relay1.stakenuts.com",
     late String? dns_srv;    // "_relays._tcp.relays.stakenuts.com",
     late num port;       // 3001
 
@@ -156,7 +172,12 @@ class PoolRelay extends DartPenance<PoolRelay>
 	{
 		return PoolRelay();
 	}
+	
+	bool operator==(Object other) =>
+      other is PoolRelay && ipv4 == other.ipv4 && ipv6 == other.ipv6 && dns == other.dns && dns_srv == other.dns_srv 
+			&& port == other.port;
 
+  	int get hashCode => Object.hash(ipv4, ipv6,dns, dns, dns_srv, port );
 }
 
 class PoolStakePool extends DartPenance<PoolStakePool>
@@ -248,6 +269,11 @@ class PoolUpdate extends DartPenance<PoolUpdate>
 	{
 		return PoolUpdate();
 	}
+	
+	bool operator==(Object other) =>
+      other is PoolUpdate && tx_hash == other.tx_hash && cert_index == other.cert_index  && action == other.action;
+
+  	int get hashCode => Object.hash(tx_hash, cert_index, action);
 }
 
 class PoolsService extends Service 
@@ -309,7 +335,7 @@ class PoolsService extends Service
   
     Future<PoolMetadata> getStakePoolMetadata(String pool_id)
     {
-		Future<http.Response> resp = get("/pools/{$pool_id}/metadata", null);
+		Future<http.Response> resp = get("/pools/$pool_id/metadata", null);
 	
         return objectFromResp(resp, PoolMetadata() );
     }
@@ -341,7 +367,7 @@ class PoolsService extends Service
   
     Future<List<PoolUpdate>> getStakePoolUpdates(String pool_id, {int? count, int? page, String? order})
     {
-		Future<http.Response> resp = get("/pools/{$pool_id}/updates", createPage(count, page, order));
+		Future<http.Response> resp = get("/pools/$pool_id/updates", createPage(count, page, order));
 	
         return listFromResp(resp, PoolUpdate()) ;
        
