@@ -257,11 +257,13 @@ class AccountWithdrawalHistory extends DartPenance<AccountWithdrawalHistory>
 	}
 }
 
+///Cardano - Accounts
 class AccountsService extends Service 
 {
      AccountsService(network, projectId)
 		:super(network, projectId);
     
+	///Obtain information about a specific stake account.
     Future<AccountContent> getAccount(String stake_address)
     {
 		Future<http.Response> resp = get("/accounts/$stake_address", null);
@@ -270,7 +272,7 @@ class AccountsService extends Service
 
     }
     
-   
+    ///Obtain information about the reward history of a specific account.
     Future<List<AccountRewardHistory>> getAccountRewardHistory(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/rewards", createPage(count, page, order));
@@ -280,7 +282,7 @@ class AccountsService extends Service
         
     }
     
-   
+    ///Obtain information about the history of a specific account.
     Future<List<AccountHistory>> getAccountHistory(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/history", createPage(count, page, order));
@@ -288,7 +290,7 @@ class AccountsService extends Service
         return listFromResp(resp, AccountHistory() );
     }
     
-  
+   	///Obtain information about the delegation of a specific account
     Future<List<AccountDelegationHistory>> getAccountDelegationHistory(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/delegations", createPage(count, page, order));
@@ -296,7 +298,7 @@ class AccountsService extends Service
 		return listFromResp(resp, AccountDelegationHistory() );
     }
     
-  
+    ///Obtain information about the registrations and deregistrations of a specific account.
     Future<List<AccountRegistrationHistory>> getAccountRegistrationHistory(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/registrations", createPage(count, page, order));
@@ -304,7 +306,7 @@ class AccountsService extends Service
 		return listFromResp(resp, AccountRegistrationHistory() );
     }
     
-
+    ///Obtain information about the withdrawals of a specific account.
     Future<List<AccountWithdrawalHistory>> getAccountWithdrawalHistory(String stake_address, {int? count, int? page, String? order}) 
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/withdrawals", createPage(count, page, order));
@@ -312,7 +314,7 @@ class AccountsService extends Service
         return listFromResp(resp, AccountWithdrawalHistory() );
     }
     
-  
+    ///Obtain information about the MIRs of a specific account.
     Future<List<AccountMirHistory>> getAccountMirHistory(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/mirs", createPage(count, page, order));
@@ -320,7 +322,7 @@ class AccountsService extends Service
         return listFromResp(resp, AccountMirHistory() );
     }
     
-   
+    ///Obtain information about the addresses of a specific account. Be careful, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.
     Future<List<AccountAssociatedAddress>> getAccountAssociatedAddresses(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/addresses", createPage(count, page, order));
@@ -328,7 +330,7 @@ class AccountsService extends Service
 		return listFromResp(resp, AccountAssociatedAddress() );
     }
     
-   
+    ///Obtain information about assets associated with addresses of a specific account. Be careful, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.
     Future<List<AccountAsset>> getAccountAssociatedAssets(String stake_address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/addresses/assets", createPage(count, page, order));
@@ -336,7 +338,7 @@ class AccountsService extends Service
         return listFromResp(resp, AccountAsset() );
     }
     
-  
+    ///Obtain summed details about all addresses associated with a given account. Be careful, as an account could be part of a mangled address and does not necessarily mean the addresses are owned by user as the account.
     Future<AccountTotal> getAccountAssociatedAddressesTotal(String stake_address)
     {
 		Future<http.Response> resp = get("/accounts/$stake_address/addresses/total", null);

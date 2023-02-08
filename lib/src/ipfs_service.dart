@@ -68,20 +68,13 @@ class IPFSPinnedObject extends DartPenance<IPFSPinnedObject>
 	}
 }
 
+///IPFS
 class IPFSService extends Service 
 {
     IPFSService(network, projectId)
 		:super(network, projectId);
 
-	/*addFile2(String name, Stream<List<int>> stream) async
-	{
-		http.StreamedResponse resp = await postFile("/ipfs/add", name, stream, null, null);
-		
-		
-		return  resp.statusCode;
-		
-	}*/
-
+	///You need to /ipfs/pin/add an object to avoid it being garbage collected. This usage is being counted in your user account quota.
     Future<IPFSAdd> addFile(String name, Stream<List<int>> stream)
     {
 		Future<http.StreamedResponse> resp = postFile("/ipfs/add", name, stream, null, null);
@@ -91,7 +84,7 @@ class IPFSService extends Service
 		return objectFromRespStreamed(resp, IPFSAdd() );
     }
     
-   
+    ///Retrieve an object from the IPFS gateway (useful if you do not want to rely on a public gateway, such as ipfs.blockfrost.dev).
     Future<Stream<List<int>>> getFile(String ipfs_path) async
     {       
 		Future<http.StreamedResponse> futureResp = getStreamed("/ipfs/gateway/$ipfs_path");
@@ -101,7 +94,7 @@ class IPFSService extends Service
 		return Future.value( (resp).stream );
     }
     
-   
+    ///Pinned objects are counted in your user storage quota.
     Future<IPFSPinChange> pinObject(String IPFS_path)
     {
 		Future<http.Response> resp = postVoid("/ipfs/pin/add/$IPFS_path", null);
@@ -109,7 +102,7 @@ class IPFSService extends Service
 		return objectFromResp(resp, IPFSPinChange() );
     }
     
-   
+    ///List objects pinned to local storage
     Future<List<IPFSPinnedObject>> listPinnedObjects({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/ipfs/pin/list", createPage(count, page, order));
@@ -118,7 +111,7 @@ class IPFSService extends Service
 	
     }
    
-   
+    ///Get information about locally pinned IPFS object
     Future<IPFSPinnedObject> getPinnedObject(String IPFS_path)
     {
 		Future<http.Response> resp = get("/ipfs/pin/list/$IPFS_path", null);
@@ -126,7 +119,7 @@ class IPFSService extends Service
 		return objectFromResp(resp, IPFSPinnedObject() );
     }
     
-   
+    ///Remove pinned objects from local storage
     Future<IPFSPinChange> removePinnedObject(String IPFS_path)
     {
 		Future<http.Response> resp = postVoid("/ipfs/pin/remove/$IPFS_path", null);

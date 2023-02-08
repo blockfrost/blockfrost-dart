@@ -70,12 +70,13 @@ class NetworkInformationSupply extends DartPenance<NetworkInformationSupply>
 	}
 }
 
+///Cardano - Network
 class NetworkService extends Service 
 {
      NetworkService(network, projectId)
 		:super(network, projectId);
     
- 
+    ///Return detailed network information.
     Future<NetworkInformation> getNetworkInformation()
     {	
 		Future<http.Response> resp = get("/network", null);

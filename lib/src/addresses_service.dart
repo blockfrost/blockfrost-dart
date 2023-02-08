@@ -196,12 +196,13 @@ class AddressUTXO extends DartPenance<AddressUTXO>
 	}
 }
 
+///Cardano - Addresses
 class AddressesService extends Service 
 {
     AddressesService(network, projectId)
 		:super(network, projectId);
     
-   
+    ///Obtain information about a specific address.
     Future<Address> getAddress(String address)
     {
 		Future<http.Response> resp = get("/addresses/$address", null);
@@ -209,7 +210,7 @@ class AddressesService extends Service
         return objectFromResp(resp, Address() );
     }
     
-   
+    ///Obtain extended information about a specific address.
     Future<AddressExtended> getAddressExtended(String address)
     {
 		Future<http.Response> resp = get("/addresses/$address/extended", null);
@@ -217,7 +218,7 @@ class AddressesService extends Service
         return objectFromResp(resp, AddressExtended() );
     }
     
-  
+    ///Obtain details about an address.
     Future<AddressTotal> getAddressTotal(String address)
     {
 		Future<http.Response> resp = get("/addresses/$address/total", null);
@@ -225,7 +226,7 @@ class AddressesService extends Service
 		return objectFromResp(resp, AddressTotal() );       
     }
     
-  
+    ///UTXOs of the address.
     Future<List<AddressTotal>> getAddressUTXOs(String address, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/addresses/$address/utxos", createPage(count, page, order));
@@ -234,7 +235,7 @@ class AddressesService extends Service
 
     }
     
-   
+    ///UTXOs of the address.
     Future<List<AddressTotal>> getAddressUTXOsOfAsset(String address, String asset, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/addresses/$address/utxos/$asset", createPage(count, page, order));
@@ -242,7 +243,7 @@ class AddressesService extends Service
         return listFromResp(resp, AddressTotal() );
     }
     
-  
+    ///Transactions on the address.
     Future<List<AddressTransaction>> getAddressTransactions(String address,  {int? count, int? page, String? order, int? from, int? to})
     {
 		var params = from != null || to != null? Map<String, dynamic>() : null;

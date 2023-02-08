@@ -495,11 +495,13 @@ class TransactionWithdrawal extends DartPenance<TransactionWithdrawal>
   
 }
 
+///Cardano - Transactions
 class TransactionsService extends Service 
 {
 	TransactionsService(network, projectId)
 		:super(network, projectId);
    
+    ///Return content of the requested transaction.
     Future<Transaction> getTransaction(String hash) 
     {
 		Future<http.Response> resp = get("/txs/$hash", null);
@@ -508,7 +510,7 @@ class TransactionsService extends Service
 
     }
     
- 
+    ///Return the inputs and UTXOs of the specific transaction.
     Future<TransactionUTXOs> getTransactionUTXOs(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/utxos", null);
@@ -517,7 +519,7 @@ class TransactionsService extends Service
 		return objectFromResp(resp, TransactionUTXOs() );
     }
     
-  
+    ///Obtain information about (de)registration of stake addresses within a transaction.
     Future<List<TransactionAddressCertificate>> getTransactionStakeAddressCertificates(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/stakes", null);
@@ -525,7 +527,7 @@ class TransactionsService extends Service
         return listFromResp(resp, TransactionAddressCertificate() );
     }
     
-   
+    ///Obtain information about delegation certificates of a specific transaction.
     Future<List<TransactionDelegationCertificate>> getTransactionDelegationCertificates(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/delegations", null);
@@ -533,6 +535,7 @@ class TransactionsService extends Service
         return listFromResp(resp, TransactionDelegationCertificate() );
     }
   
+    ///Obtain information about withdrawals of a specific transaction.
     Future<List<TransactionWithdrawal>> getTransactionWithdrawals(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/withdrawals", null);
@@ -540,14 +543,15 @@ class TransactionsService extends Service
 		return listFromResp(resp, TransactionWithdrawal() );
     }
     
-  
+    ///Obtain information about Move Instantaneous Rewards (MIRs) of a specific transaction.
     Future<List<TransactionMir>> getTransactionMIRs(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/mirs", null);
 	
 		return listFromResp(resp, TransactionMir() );
     }
-  
+   
+    ///Obtain information about stake pool registration and update certificates of a specific transaction.
     Future<List<TransactionRegistrationAndUpdateCertificate>> getTransactionStakePoolUpdateCertificates(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/pool_updates", null);
@@ -555,7 +559,7 @@ class TransactionsService extends Service
 		return listFromResp(resp, TransactionRegistrationAndUpdateCertificate() );
     }
     
-  
+    ///Obtain information about stake pool retirements within a specific transaction. 
     Future<List<TransactionRetirementCertificate>> getTransactionStakePoolRetirementCertificates(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/pool_retires", null);
@@ -563,7 +567,7 @@ class TransactionsService extends Service
         return listFromResp(resp, TransactionRetirementCertificate() );
     }
     
-    
+    ///Obtain the transaction metadata.
     Future<List<TransactionMetadata>> getTransactionMetadata(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/metadata", null);
@@ -571,7 +575,7 @@ class TransactionsService extends Service
 		return listFromResp(resp, TransactionMetadata() );
     }
     
- 
+    ///Obtain the transaction metadata in CBOR.
     Future<List<TransactionMetadataCBOR>> getTransactionMetadataAsCBOR(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/metadata/cbor", null);
@@ -579,7 +583,7 @@ class TransactionsService extends Service
 		return listFromResp(resp, TransactionMetadataCBOR() );
     }
     
- 
+    ///Obtain the transaction redeemers.
     Future<List<TransactionRedeemer>> getTransactionRedeemers(String hash)
     {
 		Future<http.Response> resp = get("/txs/$hash/redeemers", null);
@@ -587,6 +591,7 @@ class TransactionsService extends Service
         return listFromResp(resp, TransactionRedeemer() );
     }
     
+    ///Submit an already serialized transaction to the network.
 	Future<String> submitTransaction(Stream<List<int>> cbor)
     {
 		Future<http.StreamedResponse> resp = postData("/tx/submit", cbor, null, {"Content-Type": "application/cbor" });

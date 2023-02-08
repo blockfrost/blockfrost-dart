@@ -26,11 +26,13 @@ class UtilitiesAddress extends DartPenance<UtilitiesAddress>
 	}
 }
 
+///Cardano - Utilities
 class UtilitiesService extends Service 
 {
     UtilitiesService(network, projectId)
 		:super(network, projectId);
     
+    ///Derive Shelley address from an xpub
     Future<UtilitiesAddress> deriveAddress(String xpub, int role, int index)
     {
 		Future<http.Response> resp = get("/utils/addresses/xpub/$xpub/$role/$index", null);
@@ -38,6 +40,7 @@ class UtilitiesService extends Service
 		return objectFromResp(resp, UtilitiesAddress());        
     }
 
+    ///Submit an already serialized transaction to evaluate how much execution units it requires.
     Future<String> submitTransactionForEvaluation(Stream<List<int>> cbor)
     {
 		Future<http.StreamedResponse> resp = postData("/utils/txs/evaluate", cbor, null, {"Content-Type": "application/cbor" });

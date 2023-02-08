@@ -125,11 +125,13 @@ class ScriptRedeemer extends DartPenance<ScriptRedeemer>
 	}
 }
 
+///Cardano - Scripts
 class ScriptsService extends Service 
 {
     ScriptsService(network, projectId)
 		:super(network, projectId);
     
+    ///List of scripts.
     Future<List<Script>> getScripts({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/scripts", createPage(count, page, order));
@@ -137,13 +139,15 @@ class ScriptsService extends Service
         return listFromResp(resp, Script() );
     }
     
+    ///Information about a specific script
     Future<ScriptInformation> getScript(String script_hash)
     {
 		Future<http.Response> resp = get("/scripts/$script_hash", null);
         
 		return objectFromResp(resp, ScriptInformation() );
     }
-    
+ 
+    ///JSON representation of a timelock script  
     Future<ScriptJSON> getScriptAsJSON(String script_hash)
     {
 		Future<http.Response> resp = get("/scripts/$script_hash/json", null);
@@ -151,6 +155,7 @@ class ScriptsService extends Service
         return objectFromResp(resp, ScriptJSON() );
     }
     
+    ///CBOR representation of a plutus script
     Future<ScriptCBOR> getScriptAsCBOR(String script_hash)
     {
 		Future<http.Response> resp = get("/scripts/$script_hash/cbor", null);
@@ -159,6 +164,7 @@ class ScriptsService extends Service
 		return objectFromResp(resp, ScriptCBOR() );
     }
     
+    ///List of redeemers of a specific script
     Future<List<ScriptRedeemer>> getScriptRedeemers(String script_hash,{int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/scripts/$script_hash/redeemers", createPage(count, page, order));
@@ -167,7 +173,7 @@ class ScriptsService extends Service
 		return listFromResp(resp, ScriptRedeemer() );        
     }
     
- 
+    ///Query JSON value of a datum by its hash
     Future<ScriptDatum> getDatumAsJSON(String datum_hash)
     {
 		Future<http.Response> resp = get("/scripts/datum/$datum_hash", null);

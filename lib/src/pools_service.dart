@@ -276,12 +276,13 @@ class PoolUpdate extends DartPenance<PoolUpdate>
   	int get hashCode => Object.hash(tx_hash, cert_index, action);
 }
 
+///Cardano - Pools
 class PoolsService extends Service 
 {
     PoolsService(network, projectId)
 		:super(network, projectId);
     
-   
+    ///List of registered stake pools.
     Future<List<String>> getStakePools({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools", createPage(count, page, order));
@@ -290,7 +291,7 @@ class PoolsService extends Service
 
     }
     
-   
+    ///List of registered stake pools with additional information.
     Future<List<PoolExtended>> getStakePoolsExtended({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/extended", createPage(count, page, order));
@@ -298,7 +299,7 @@ class PoolsService extends Service
         return listFromResp(resp, PoolExtended() );
     }
     
-   
+    ///List of already retired pools.
     Future<List<Pool>> getRetiredStakePools({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/retired", createPage(count, page, order));
@@ -306,7 +307,7 @@ class PoolsService extends Service
         return listFromResp(resp, Pool() );
     }
     
-  
+    //List of stake pools retiring in the upcoming epochs
     Future<List<Pool>> getRetiringStakePools({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/retiring", createPage(count, page, order));
@@ -314,7 +315,7 @@ class PoolsService extends Service
         return listFromResp(resp, Pool() );
     }
     
-   
+    ///Pool information.
     Future<PoolStakePool> getStakePool(String pool_id)
     {
 		Future<http.Response> resp = get("/pools/$pool_id", null);
@@ -323,7 +324,7 @@ class PoolsService extends Service
 
     }
     
-  
+    ///History of stake pool parameters over epochs.
     Future<List<PoolHistory>> getStakePoolHistory(String pool_id, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/$pool_id/history", createPage(count, page, order));
@@ -332,7 +333,7 @@ class PoolsService extends Service
         
     }
     
-  
+    ///Stake pool registration metadata.
     Future<PoolMetadata> getStakePoolMetadata(String pool_id)
     {
 		Future<http.Response> resp = get("/pools/$pool_id/metadata", null);
@@ -340,7 +341,7 @@ class PoolsService extends Service
         return objectFromResp(resp, PoolMetadata() );
     }
     
-  
+    ///Relays of a stake pool.
     Future<List<PoolRelay>> getStakePoolRelays(String pool_id)
     {
 		Future<http.Response> resp = get("/pools/$pool_id/relays", null);
@@ -348,7 +349,7 @@ class PoolsService extends Service
         return listFromResp(resp, PoolRelay()) ;
     }
     
-   
+    ///List of current stake pools delegators.
     Future<List<PoolDelegator>> getStakePoolDelegators(String pool_id, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/$pool_id/delegators", createPage(count, page, order));
@@ -356,7 +357,7 @@ class PoolsService extends Service
         return listFromResp(resp, PoolDelegator()) ;
     }
     
-   
+    ///List of stake pools blocks.
     Future<List<String>> getStakePoolBlocks(String pool_id, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/$pool_id/blocks", createPage(count, page, order));
@@ -364,7 +365,7 @@ class PoolsService extends Service
         return listOfStringFromResp(resp);
     }
     
-  
+    ///List of certificate updates to the stake pool.
     Future<List<PoolUpdate>> getStakePoolUpdates(String pool_id, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/pools/$pool_id/updates", createPage(count, page, order));

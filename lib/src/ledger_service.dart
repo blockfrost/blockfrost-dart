@@ -45,11 +45,13 @@ class LedgerGenesis extends DartPenance<LedgerGenesis>
   	int get hashCode => Object.hash(active_slots_coefficient, update_quorum, max_lovelace_supply, network_magic, epoch_length, system_start, slots_per_kes_period, slot_length, max_kes_evolutions, security_param );
 }
 
+///Cardano - Ledger
 class LedgerService extends Service 
 {
     LedgerService(network, projectId)
 		:super(network, projectId);
-  
+   
+    ///Return the information about blockchain genesis.
     Future<LedgerGenesis> getBlockchainGenesis()
     {
 		Future<http.Response> resp = get("/genesis", null);

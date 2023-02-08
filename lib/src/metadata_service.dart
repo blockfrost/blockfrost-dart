@@ -77,11 +77,13 @@ class MetadataLabel extends DartPenance<MetadataLabel>
 	}
 }
 
+///Cardano - Metadata
 class MetadataService extends Service 
 {
     MetadataService(network, projectId)
 		:super(network, projectId);
-   
+    
+    ///List of all used transaction metadata labels.
     Future<List<MetadataLabel>> getTransactionMetadataLabels({int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/metadata/txs/labels", createPage(count, page, order));
@@ -92,6 +94,7 @@ class MetadataService extends Service
 
     }
     
+	///Transaction metadata per label.
     Future<List<MetadataJSON>> getTransactionMetadataAsJSON(String label, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/metadata/txs/labels/$label", createPage(count, page, order));
@@ -101,6 +104,7 @@ class MetadataService extends Service
         
     }
     
+    //Transaction metadata per label.
     Future<List<MetadataCBOR>> getTransactionMetadataAsCBOR(String label, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/metadata/txs/labels/$label/cbor", createPage(count, page, order));

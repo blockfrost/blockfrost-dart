@@ -94,12 +94,13 @@ class BlockTransaction extends DartPenance<BlockTransaction>
 }
 
 
-
+///Cardano - Blocks
 class BlockService extends Service 
 {
     BlockService(network, projectId)
 		:super(network, projectId);
  
+    ///Return the latest block available to the backends, also known as the tip of the blockchain.
     Future<BlockContent> getLatestBlock()
     {
 		Future<http.Response> resp = get("/blocks/latest", null);
@@ -107,14 +108,15 @@ class BlockService extends Service
         return objectFromResp(resp, BlockContent() );
     }
     
-
+    ///Return the transactions within the latest block.
     Future<List<String>> getLatestBlockTransactions( {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/blocks/latest/txs", createPage(count, page, order));
 		
 		return listOfStringFromResp(resp);
     }
-  
+  	
+	///Return the content of a requested block.
     Future<BlockContent> getBlock(String hash_or_number)
     {
 		Future<http.Response> resp = get("/blocks/$hash_or_number", null);
@@ -122,7 +124,7 @@ class BlockService extends Service
         return objectFromResp(resp, BlockContent() );
     }
     
- 
+    ///Return the list of blocks following a specific block.
     Future<List<BlockContent>> listNextBlocks(String hash_or_number, {int? count, int? page, String? order})             
     {
 		Future<http.Response> resp = get("/blocks/$hash_or_number/next", createPage(count, page, order));
@@ -130,7 +132,7 @@ class BlockService extends Service
         return listFromResp(resp, BlockContent() );
     }
     
-
+    ///Return the list of blocks preceding a specific block.
     Future<List<BlockContent>> listPreviousBlocks(String hash_or_number, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/blocks/$hash_or_number/previous", createPage(count, page, order));
@@ -138,7 +140,7 @@ class BlockService extends Service
 		return listFromResp(resp, BlockContent() ); 
     }
     
-
+    ///Return the content of a requested block for a specific slot.
     Future<BlockContent> getSpecificBlockInSlot(int slot) 
     {
 		Future<http.Response> resp = get("/blocks/slot/$slot", null);
@@ -146,7 +148,7 @@ class BlockService extends Service
         return objectFromResp(resp, BlockContent() );
     }
     
- 
+    ///Return the content of a requested block for a specific slot in an epoch.
     Future<BlockContent> getSpecificBlockInSlotInEpoch(int slot, int epoch) 
     {
 		Future<http.Response> resp = get("/blocks/epoch/$epoch/slot/$slot", null);
@@ -154,7 +156,7 @@ class BlockService extends Service
 		return objectFromResp(resp, BlockContent() );
     }
     
- 
+    ///Return the transactions within the block.
     Future<List<String>> getBlockTransactions(dynamic hash_or_number, {int? count, int? page, String? order}) 
     {
 		Future<http.Response> resp = get("/blocks/$hash_or_number/txs", createPage(count, page, order));
@@ -163,7 +165,7 @@ class BlockService extends Service
     }
     
    
-
+    ///Return list of addresses affected in the specified block with additional information, sorted by the bech32 address, ascending.
     Future<List<BlockAddress>> getAddressesAffectedInBlock(hash_or_number, {int? count, int? page, String? order})
     {
 		Future<http.Response> resp = get("/blocks/$hash_or_number/addresses", createPage(count, page, order));

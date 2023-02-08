@@ -141,11 +141,13 @@ class AssetTransaction extends DartPenance<AssetTransaction>
   	int get hashCode => Object.hash(tx_hash, tx_index, block_height, block_time);
 }
 
+///Cardano - Assets
 class AssetsService extends Service 
 {
     AssetsService(network, projectId)
 		:super(network, projectId);
     
+	///List of assets. If an asset is completely burned, it will stay on the list with quantity 0 (order of assets is immutable).
     Future<List<Asset>> getAssetList( {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/assets", createPage(count, page, order));
@@ -153,6 +155,7 @@ class AssetsService extends Service
 		return listFromResp(resp, Asset() );
     }
     
+    ///Information about a specific asset
     Future<AssetContent> getAsset(String asset)
     {
 		Future<http.Response> resp = get("/assets/$asset", null);
@@ -160,6 +163,7 @@ class AssetsService extends Service
         return objectFromResp(resp, AssetContent() );
     }
     
+    ///History of a specific asset
     Future<List<AssetHistory>> getAssetHistory(String asset, {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/assets/$asset/history", createPage(count, page, order));
@@ -167,6 +171,7 @@ class AssetsService extends Service
         return listFromResp(resp, AssetHistory() );
     }
    
+    ///List of a specific asset transactions
    	Future<List<AssetTransaction>> getAssetTransactions(String asset, {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/assets/$asset/transactions", createPage(count, page, order));
@@ -174,6 +179,7 @@ class AssetsService extends Service
         return listFromResp(resp, AssetTransaction() );
     }
     
+    ///List of a addresses containing a specific asset
   	Future<List<AssetAddress>> getAssetByAddresses(String asset, {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/assets/$asset/addresses", createPage(count, page, order));
@@ -181,7 +187,7 @@ class AssetsService extends Service
         return listFromResp(resp, AssetAddress() );
     }
     
-   
+    ///List of asset minted under a specific policy
     Future<List<AssetAddress>> getAssetsByPolicy(String policy_id, {int? count, int? page, String? order} )
     {
 		Future<http.Response> resp = get("/assets/policy/$policy_id", createPage(count, page, order));
